@@ -1,7 +1,7 @@
 <template>
 
   <div class="sidebar">
-    <h1 class="ui inverted center aligned header">#Tuto::Stack</h1>
+    <h1 class="ui inverted center aligned header">#Tutox::Stacks</h1>
     <connected-user></connected-user>
     <channels></channels>
   </div>
