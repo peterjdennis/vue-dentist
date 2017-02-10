@@ -6,6 +6,7 @@ import firebase from 'firebase'
 import Login from './components/pages/Login'
 import Register from './components/pages/Register'
 import TChat from './components/pages/TChat'
+import store from 'store'
 
 Vue.use(VueRouter);
 
@@ -18,8 +19,18 @@ const routes = [
     path: '/register', component: Register
   },
   {
-    path: '/', component: TChat
-  }
+    path: '/',
+    component: TChat,
+    beforeEnter: (to, from, next) => {
+
+      if(!firebase.auth().currentUser){
+        next('/login');
+      }else{
+        next()
+      }
+    }
+  },
+
 ];
 
 const router = new VueRouter({routes});
@@ -37,9 +48,19 @@ let config = {
 firebase.initializeApp(config);
 window.firebase = firebase;
 
-new Vue({
-  el: '#app',
-  template: '<App/>',
-  components: { App },
-  router
+const unsuscribe = firebase.auth().onAuthStateChanged(user => {
+
+  store.dispatch('setUser', user);
+
+  new Vue({
+    el: '#app',
+    template: '<App/>',
+    components: { App },
+    router, store
+  });
+
+  unsuscribe();
+
 });
+
+

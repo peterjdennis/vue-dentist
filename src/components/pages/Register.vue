@@ -14,31 +14,31 @@
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <input type="text" name="name" placeholder="ชื่อผู้ใช้" v-model="name">
+                <input type="text" name="name" placeholder="ชื่อผู้ใช้" v-model.trim="name" required>
               </div>
             </div>
             <div class="field">
               <div class="ui left icon input">
                 <i class="mail icon"></i>
-                <input type="email" name="email" placeholder="thsanan.pu.55@ubu.ac.th" v-model.trim="email">
+                <input type="email" name="email" placeholder="thsanan.pu.55@ubu.ac.th" v-model.trim="email" required>
               </div>
             </div>
 
             <div class="field">
               <div class="ui left icon input">
                 <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Password" v-model.trim="password">
+                <input type="password" name="password" placeholder="Password" v-model.trim="password" required>
               </div>
             </div>
             <div class="field">
               <div class="ui left icon input">
                 <i class="lock icon"></i>
-                <input type="password" name="password_confirm" placeholder="Password_Comfirm"
-                       v-model="password_comfirm">
+                <input type="password" name="password_confirm" placeholder="Password_Confirm"
+                       v-model.trim="password_confirm" required>
               </div>
             </div>
 
-            <div class="ui fluid large teal button" @click.prevent="register">ลงทะเบียน</div>
+            <div class="ui fluid large teal button" @click.prevent="register" :class="{'loading':isLoading}">ลงทะเบียน</div>
           </div>
 
           <div class="ui error message" v-if="hasErrors">
@@ -59,6 +59,8 @@
 
 <script>
 
+    import md5 from 'md5'
+
     export default{
     name: 'register',
         data(){
@@ -66,8 +68,10 @@
                     name: '',
                     email: '',
                     password: '',
-                    password_comfirm: '',
-                    errors: []
+                    password_confirm: '',
+                    errors: [],
+                    usersRef: firebase.database().ref('users'),
+                    isLoading: false
 
             }
         },
@@ -83,14 +87,44 @@
 
 
               if(this.isFormValid()){
+
+                this.isLoading = true;
+
                firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                     .then(user => {
-                              console.log("register complete " + user.email)
+                              console.log("register complete " + user.email);
+                              user.updateProfile({
+                                displayName: this.name,
+                                photoURL: "http://www.gravatar.com/avatar/" + md5(user.email) + "?d=identicon"
+                              }).then(() => {
+                                    this.saveUserToUserRef(user).then( () => {
+                                        this.$store.dispatch("setUser", user)
+                                        this.$router.push('/')
+
+                                    });
+                              }, error => {
+                                    console.log(error)
+                                    this.errors.push(error.message)
+                                    this.isLoading = false;
+                              });
+
+
                             }).catch(error => {
-                                     console.log(error)
+                                     console.log(error);
+                                     this.errors.push(error.message)
+                                     this.isLoading = false;
                             });
 
               }//end if method register
+
+            },
+            saveUserToUserRef(user){
+
+              return this.usersRef.child(user.uid).set({
+                  name: user.displayName,
+                  avatar: user.photoURL
+
+              })
 
             },
             isEmpty(){
@@ -114,7 +148,7 @@
                 return false;
               }
               if(!this.passwordValid()){
-                this.errors.push('กรอกข้อมูล Password ไม่ตรงกัน')
+                this.errors.push('กรอกข้อมูล Password ไม่ตรงกัน หรือต้องมีอย่างน้อย 6 ตัวอักษร')
                 return false;
               }
               return true;
