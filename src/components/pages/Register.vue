@@ -1,0 +1,139 @@
+<template>
+  <div>
+
+    <div class="ui middle aligned center aligned grid login_container">
+      <div class="column">
+        <h2 class="ui pink image header">
+          <div class="content">
+            #Practice::vChatFire
+          </div>
+        </h2>
+
+        <form class="ui large form" :class="{'error' : hasErrors}">
+          <div class="ui stacked segment">
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <input type="text" name="name" placeholder="ชื่อผู้ใช้" v-model="name">
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="mail icon"></i>
+                <input type="email" name="email" placeholder="thsanan.pu.55@ubu.ac.th" v-model.trim="email">
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password" name="password" placeholder="Password" v-model.trim="password">
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password" name="password_confirm" placeholder="Password_Comfirm"
+                       v-model="password_comfirm">
+              </div>
+            </div>
+
+            <div class="ui fluid large teal button" @click.prevent="register">ลงทะเบียน</div>
+          </div>
+
+          <div class="ui error message" v-if="hasErrors">
+            <p v-for="error in errors">{{error}}</p>
+          </div>
+
+        </form>
+
+        <div class="ui message">
+          ต้องการ Login?
+          <router-link to="/login">Login</router-link>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+
+    export default{
+    name: 'register',
+        data(){
+            return{
+                    name: '',
+                    email: '',
+                    password: '',
+                    password_comfirm: '',
+                    errors: []
+
+            }
+        },
+        computed: {
+            hasErrors(){
+              return this.errors.length > 0;
+            }
+        },
+        methods: {
+            register(){
+              console.log("Register")
+              this.errors = [];
+
+
+              if(this.isFormValid()){
+               firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+                    .then(user => {
+                              console.log("register complete " + user.email)
+                            }).catch(error => {
+                                     console.log(error)
+                            });
+
+              }//end if method register
+
+            },
+            isEmpty(){
+              if(this.name.length == 0 || this.email.length == 0 || this.password.length == 0 || this.password_confirm == 0){
+                return true;
+              }
+              return false;
+            },
+            passwordValid(){
+              if(this.password.length < 6 || this.password_confirm.length < 6){
+                return false;
+              }
+              if(this.password !== this.password_confirm){
+                return false;
+              }
+              return true;
+            },
+            isFormValid(){
+              if(this.isEmpty()){
+                this.errors.push('ฟอร์มห้ามว่าง กรุณากรอกให้ครบ')
+                return false;
+              }
+              if(!this.passwordValid()){
+                this.errors.push('กรอกข้อมูล Password ไม่ตรงกัน')
+                return false;
+              }
+              return true;
+            }
+        }//end methods
+    }
+
+
+</script>
+
+<style scoped>
+
+  .login_container{
+    margin-top: 40px;
+  }
+  .column{
+    max-width: 450px;
+  }
+
+
+
+</style>
