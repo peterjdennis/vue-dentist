@@ -2,7 +2,7 @@
   "name": "vue-chatfire",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "thsanan <thsanan.pu.55@ubu.ac.th>",
+  "author": "",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
