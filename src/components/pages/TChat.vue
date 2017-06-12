@@ -1,7 +1,6 @@
 <template>
 <div class="tchat_container">
-  <sidebar></sidebar>
-  <messages></messages>
+
 
 
 </div>
