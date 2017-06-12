@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App'
@@ -39,11 +38,12 @@ const router = new VueRouter({routes});
 
 
 let config = {
-  apiKey: "AIzaSyCwUoiS7P89NLUiUQyLhJJdvgI1OrfEATI",
-  authDomain: "vue-chatfire.firebaseapp.com",
-  databaseURL: "https://vue-chatfire.firebaseio.com",
-  storageBucket: "vue-chatfire.appspot.com",
-  messagingSenderId: "539342432440"
+    apiKey: "AIzaSyDceKDi95KEiCo-GenQkuthEuNbK6qq9o8",
+    authDomain: "vue-starter.firebaseapp.com",
+    databaseURL: "https://vue-starter.firebaseio.com",
+    projectId: "vue-starter",
+    storageBucket: "vue-starter.appspot.com",
+    messagingSenderId: "850080108363"
 };
 firebase.initializeApp(config);
 window.firebase = firebase;
