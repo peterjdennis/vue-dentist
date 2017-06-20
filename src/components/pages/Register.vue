@@ -99,7 +99,8 @@
 
               return this.usersRef.child(user.uid).set({
                   name: user.displayName,
-                  avatar: user.photoURL
+                  timeStamp: new Date().toString(),
+                  zipCode: this.zipCode
 
               })
 
