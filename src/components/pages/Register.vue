@@ -1,60 +1,37 @@
 <template>
   <div>
-
-    <div class="ui middle aligned center aligned grid login_container">
-      <div class="column">
-        <h2 class="ui pink image header">
-          <div class="content">
-            #Practice::vChatFire
+    <div>
+    <div>
+      <div clss="conatiner-fluid">
+        <div class="row justify-content-center">
+          <div class="col-4 login">
+            <form>
+              <div class="form-group">
+                <input type="name" class="form-control" placeholder="name" v-model.trim="name" required>
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Email" v-model.trim="email" required>
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" v-model.trim="password" required>
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Confirm Password" v-model.trim="password_confirm" required>
+              </div>
+              <button type="button" class="btn btn-primary" @click.prevent="register" :class="{'loading':isLoading}">Sign Up</button>
+              <div class="ui error message" v-if="hasErrors">
+                <p v-for="error in errors">{{error}}</p>
+              </div>
+            </form>
+            <div class="ui message">
+              <router-link to="/login">Login</router-link>
+            </div>
           </div>
-        </h2>
-
-        <form class="ui large form" :class="{'error' : hasErrors}">
-          <div class="ui stacked segment">
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="user icon"></i>
-                <input type="text" name="name" placeholder="ชื่อผู้ใช้" v-model.trim="name" required>
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="mail icon"></i>
-                <input type="email" name="email" placeholder="thsanan.pu.55@ubu.ac.th" v-model.trim="email" required>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Password" v-model.trim="password" required>
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" name="password_confirm" placeholder="Password_Confirm"
-                       v-model.trim="password_confirm" required>
-              </div>
-            </div>
-
-            <div class="ui fluid large teal button" @click.prevent="register" :class="{'loading':isLoading}">ลงทะเบียน</div>
-          </div>
-
-          <div class="ui error message" v-if="hasErrors">
-            <p v-for="error in errors">{{error}}</p>
-          </div>
-
-        </form>
-
-        <div class="ui message">
-          ต้องการ Login?
-          <router-link to="/login">Login</router-link>
         </div>
       </div>
     </div>
-
   </div>
+</div>
 </template>
 
 <script>
@@ -99,7 +76,7 @@
                               }).then(() => {
                                     this.saveUserToUserRef(user).then( () => {
                                         this.$store.dispatch("setUser", user)
-                                        this.$router.push('/')
+                                        this.$router.push('/profile')
 
                                     });
                               }, error => {
@@ -144,11 +121,11 @@
             },
             isFormValid(){
               if(this.isEmpty()){
-                this.errors.push('ฟอร์มห้ามว่าง กรุณากรอกให้ครบ')
+                this.errors.push('Please complete entire Sign Up')
                 return false;
               }
               if(!this.passwordValid()){
-                this.errors.push('กรอกข้อมูล Password ไม่ตรงกัน หรือต้องมีอย่างน้อย 6 ตัวอักษร')
+                this.errors.push('Passwords do not match')
                 return false;
               }
               return true;

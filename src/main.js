@@ -2,15 +2,19 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App'
 import firebase from 'firebase'
+import Home from './components/pages/Home'
+import Profile from './components/pages/Profile'
 import Login from './components/pages/Login'
 import Register from './components/pages/Register'
-import TChat from './components/pages/TChat'
+
 import store from 'store'
 
 Vue.use(VueRouter);
 
-
 const routes = [
+  {
+    path: '/', component: Home
+  },
   {
     path: '/login', component: Login
   },
@@ -18,8 +22,8 @@ const routes = [
     path: '/register', component: Register
   },
   {
-    path: '/',
-    component: TChat,
+    path: '/profile',
+    component: Profile,
     beforeEnter: (to, from, next) => {
 
       if(!firebase.auth().currentUser){
@@ -33,8 +37,6 @@ const routes = [
 ];
 
 const router = new VueRouter({routes});
-
-
 
 
 let config = {
@@ -62,5 +64,3 @@ const unsuscribe = firebase.auth().onAuthStateChanged(user => {
   unsuscribe();
 
 });
-
-

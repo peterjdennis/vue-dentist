@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-
+    <top></top>
     <router-view>
 
     </router-view>
@@ -9,12 +9,12 @@
 </template>
 
 <script>
-
+import Top from 'components/Top'
 
 export default {
   name: 'app',
   components: {
-
+    Top
   }
 }
 </script>

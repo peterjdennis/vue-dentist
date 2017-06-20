@@ -1,50 +1,26 @@
 <template>
   <div>
-
-    <div class="ui middle aligned center aligned grid login_container">
-      <div class="column">
-        <h2 class="ui pink image header">
-          <div class="content">
-            #Practice::vChatFire
-          </div>
-        </h2>
-
-        <form class="ui large form" :class="{'error' : hasErrors}">
-          <div class="ui stacked segment">
-
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="mail icon"></i>
-                <input type="email" name="email" placeholder="email" v-model.trim="email" required>
-              </div>
+    <div clss="conatiner-fluid">
+      <div class="row justify-content-center">
+        <div class="col-4 login">
+          <form>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Email" v-model.trim="email" required>
             </div>
-
-
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Password"
-                       v-model.trim="password" required>
-              </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder="Password" v-model.trim="password" required>
             </div>
-
-            <div class="ui fluid large teal button" @click.prevent="login" :class="{'loading':isLoading}">เข้าสู่ระบบ
+            <button type="button" class="btn btn-primary" @click.prevent="login" :class="{'loading':isLoading}">Login</button>
+            <div v-if="hasErrors">
+              <p v-for="error in errors">{{error}}</p>
             </div>
+          </form>
+          <div class="ui message">
+            <router-link to="/register">Registration</router-link>
           </div>
-
-          <div class="ui error message" v-if="hasErrors">
-            <p v-for="error in errors">{{error}}</p>
-          </div>
-
-        </form>
-
-        <div class="ui message">
-          ลงทะเบียน
-          <router-link to="/register">Registration</router-link>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -76,7 +52,7 @@
                 .then(user => {
 
                       this.$store.dispatch('setUser', user)
-                      this.$router.push('/')
+                      this.$router.push('/profile')
 
                 }).catch(error => {
 
@@ -97,11 +73,10 @@
 </script>
 
 <style scope>
-  .login_container{
-    margin-top: 40px;
+  .login{
+    text-align:center;
+    border-style: solid;
+    border-width: 1px;
+    padding: 10px;
   }
-  .column{
-    max-width: 450px;
-  }
-
 </style>
