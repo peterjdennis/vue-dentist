@@ -39,15 +39,15 @@ const routes = [
 const router = new VueRouter({routes});
 
 
-let config = {
+firebase.initializeApp ({
     apiKey: "AIzaSyDceKDi95KEiCo-GenQkuthEuNbK6qq9o8",
     authDomain: "vue-starter.firebaseapp.com",
     databaseURL: "https://vue-starter.firebaseio.com",
     projectId: "vue-starter",
     storageBucket: "vue-starter.appspot.com",
     messagingSenderId: "850080108363"
-};
-firebase.initializeApp(config);
+});
+
 window.firebase = firebase;
 
 const unsuscribe = firebase.auth().onAuthStateChanged(user => {
